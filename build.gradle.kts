@@ -5,22 +5,30 @@ plugins {
 }
 
 group = "org.lushplugins"
-version = "1.0.0"
+version = "2.0.0"
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.papermc.io/repository/maven-public/") // Paper
+    maven("https://repo.lushplugins.org/snapshots/") // LushLib
+    maven("https://repo.codemc.io/repository/maven-releases/") // PacketEvents
+    maven("https://maven.pvphub.me/tofaa") // EntityLib
+    maven("https://maven.enginehub.org/repo/") // WorldGuard
 }
 
 dependencies {
     // Dependencies
-    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
-
-    // Soft Dependencies
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("com.github.retrooper.packetevents:spigot:2.2.1")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     // Libraries
+    implementation("org.lushplugins:LushLib:0.10.89")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.16")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.16")
+    implementation("io.github.tofaa2:spigot:3.1.0-SNAPSHOT")
 }
 
 java {
@@ -60,6 +68,9 @@ tasks {
         minecraftVersion("1.21.11")
 
         downloadPlugins {
+            modrinth("packetevents", "2.11.2+spigot")
+            modrinth("worldedit", "CkT32vix")
+            modrinth("worldguard", "7.0.15")
             modrinth("viaversion", "5.7.1")
             modrinth("viabackwards", "5.7.1")
         }

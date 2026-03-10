@@ -3,3 +3,6 @@ version: ${project.version}
 main: org.lushplugins.playerhide.PlayerHide
 api-version: '1.21'
 github-repo: OakLoaf/PlayerHide
+depend:
+  - packetevents
+  - WorldGuard
