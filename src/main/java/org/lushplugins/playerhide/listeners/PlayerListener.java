@@ -31,8 +31,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
-        PacketEventsHelper.removeCachedMeta(uuid);
-        PlayerHide.getInstance().getVisibilityManager().removeCachedUser(uuid);
+        PlayerHide.getInstance().getVisibilityManager().removeCachedUser(event.getPlayer().getUniqueId());
     }
 }

@@ -6,6 +6,7 @@ import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.player.Equipment;
 import com.github.retrooper.packetevents.protocol.player.EquipmentSlot;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityEquipment;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import me.tofaa.entitylib.meta.Metadata;
 import me.tofaa.entitylib.meta.types.PlayerMeta;
@@ -17,41 +18,24 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketEventsHelper {
-    private static final ConcurrentHashMap<UUID, PlayerMeta> PLAYER_META_CACHE = new ConcurrentHashMap<>();
-
-    // TODO: Ideally remove in favour of getting accurate metadata
-    public static PlayerMeta convertBukkitPlayer(Player player) {
-        PlayerMeta playerMeta;
-        if (PLAYER_META_CACHE.containsKey(player.getUniqueId())) {
-            playerMeta = PLAYER_META_CACHE.get(player.getUniqueId());
-        } else {
-            playerMeta = new PlayerMeta(player.getEntityId(), new Metadata(player.getEntityId()));
-            PLAYER_META_CACHE.put(player.getUniqueId(), playerMeta);
-        }
-
-        playerMeta.setOnFire(player.getFireTicks() > 0);
-        playerMeta.setSneaking(player.isSneaking());
-        playerMeta.setSprinting(player.isSprinting());
-        playerMeta.setSwimming(player.isSwimming());
-        playerMeta.setInvisible(player.isInvisible());
-        playerMeta.setHasGlowingEffect(player.isGlowing());
-        playerMeta.setFlyingWithElytra(player.isGliding());
-
-        return playerMeta;
-    }
 
     public static void setInvisible(Collection<? extends Player> viewers, Player player) {
-        PlayerMeta playerMeta = convertBukkitPlayer(player);
+        int entityId = player.getEntityId();
+        // Hacky method to get a PlayerMeta object with the player's current metadata
+        Metadata metadata = new Metadata(entityId);
+        metadata.setMetaFromPacket(new WrapperPlayServerEntityMetadata(player.getEntityId(), SpigotConversionUtil.getEntityMetadata(player)));
+
+        PlayerMeta playerMeta = new PlayerMeta(entityId, metadata);
         playerMeta.setInvisible(true);
+
         viewers.forEach(viewer -> PacketEvents.getAPI().getPlayerManager().sendPacket(viewer, playerMeta.createPacket()));
     }
 
     public static void syncPlayerFlags(Collection<? extends Player> viewers, Player player) {
-        PlayerMeta playerMeta = convertBukkitPlayer(player);
-        viewers.forEach(viewer -> PacketEvents.getAPI().getPlayerManager().sendPacket(viewer, playerMeta.createPacket()));
+        WrapperPlayServerEntityMetadata packet = new WrapperPlayServerEntityMetadata(player.getEntityId(), SpigotConversionUtil.getEntityMetadata(player));
+        viewers.forEach(viewer -> PacketEvents.getAPI().getPlayerManager().sendPacket(viewer, packet));
     }
 
     public static List<Equipment> getEquipmentWithBootsOnly(Player player) {
@@ -107,9 +91,5 @@ public class PacketEventsHelper {
         }
 
         return null;
-    }
-
-    public static void removeCachedMeta(UUID uuid) {
-        PLAYER_META_CACHE.remove(uuid);
     }
 }
