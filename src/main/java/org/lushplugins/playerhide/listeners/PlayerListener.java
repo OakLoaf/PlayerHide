@@ -29,8 +29,6 @@ public class PlayerListener implements Listener {
         Bukkit.getScheduler().runTaskLater(PlayerHide.getInstance(), () -> {
             visibilityManager.calculateAndUpdateState(player);
         }, 1);
-
-//        visibilityManager.calculateAndUpdateState(player);
     }
 
     @EventHandler
