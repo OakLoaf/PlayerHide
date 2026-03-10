@@ -26,8 +26,6 @@ public final class PlayerHide extends SpigotPlugin {
 
     @Override
     public void onEnable() {
-
-
         registerListener(new PlayerListener());
 
         PacketEventsAPI<?> packetEvents = PacketEvents.getAPI();
@@ -45,11 +43,6 @@ public final class PlayerHide extends SpigotPlugin {
                 PlayerHide.getInstance().getVisibilityManager().calculateAndUpdateState(player);
             });
         }, 0, 5);
-    }
-
-    @Override
-    public void onDisable() {
-        // Disable implementation
     }
 
     public VisibilityManager getVisibilityManager() {

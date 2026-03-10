@@ -72,10 +72,8 @@ public class VisibilityManager {
         }
     }
 
-    public VisibilityState calculateAndUpdateState(Player player) {
-        VisibilityState state = calculateState(player);
-        updateState(player, state);
-        return state;
+    public void calculateAndUpdateState(Player player) {
+        updateState(player, calculateState(player));
     }
 
     public void removeCachedUser(UUID uuid) {
