@@ -22,7 +22,7 @@ dependencies {
     // Dependencies
     compileOnly("io.papermc.paper:paper-api:26.2.build.+")
     compileOnly("com.github.retrooper:packetevents-spigot:2.14.0")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.19")
 
     // Libraries
     implementation("org.lushplugins.lushlib:utils:1.0.2")
