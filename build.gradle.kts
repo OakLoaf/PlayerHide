@@ -20,19 +20,19 @@ repositories {
 
 dependencies {
     // Dependencies
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
     compileOnly("com.github.retrooper:packetevents-spigot:2.11.2")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     // Libraries
     implementation("org.lushplugins:LushLib:0.10.89")
-    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.16")
-    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.16")
-    implementation("io.github.tofaa2:spigot:3.1.0-SNAPSHOT")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.18")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.18")
+    implementation("io.github.tofaa2:spigot:4.0.0-alpha.2")
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 
     registerFeature("optional") {
         usingSourceSet(sourceSets["main"])

@@ -1,6 +1,7 @@
 package org.lushplugins.playerhide.util;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
 import com.github.retrooper.packetevents.protocol.player.Equipment;
@@ -8,8 +9,8 @@ import com.github.retrooper.packetevents.protocol.player.EquipmentSlot;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityEquipment;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import me.tofaa.entitylib.meta.MetaFields;
 import me.tofaa.entitylib.meta.Metadata;
-import me.tofaa.entitylib.meta.types.PlayerMeta;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -17,20 +18,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 public class PacketEventsHelper {
 
     public static void setInvisible(Collection<? extends Player> viewers, Player player) {
         int entityId = player.getEntityId();
-        // Hacky method to get a PlayerMeta object with the player's current metadata
-        Metadata metadata = new Metadata(entityId);
-        metadata.setMetaFromPacket(new WrapperPlayServerEntityMetadata(player.getEntityId(), SpigotConversionUtil.getEntityMetadata(player)));
+        // Hacky method to get a Metadata object with the player's current metadata
+        Metadata metadata = new Metadata();
+        WrapperPlayServerEntityMetadata packet = new WrapperPlayServerEntityMetadata(entityId, SpigotConversionUtil.getEntityMetadata(player));
+        metadata.setMetaFromPacket(packet, EntityTypes.PLAYER);
+        metadata.setFlag(MetaFields.Entity.INVISIBLE, true);
 
-        PlayerMeta playerMeta = new PlayerMeta(entityId, metadata);
-        playerMeta.setInvisible(true);
-
-        viewers.forEach(viewer -> PacketEvents.getAPI().getPlayerManager().sendPacket(viewer, playerMeta.createPacket()));
+        int protocolVersion = packet.getServerVersion().getProtocolVersion();
+        viewers.forEach(viewer -> PacketEvents.getAPI().getPlayerManager().sendPacket(viewer, metadata.createPacket(entityId, protocolVersion)));
     }
 
     public static void syncPlayerFlags(Collection<? extends Player> viewers, Player player) {

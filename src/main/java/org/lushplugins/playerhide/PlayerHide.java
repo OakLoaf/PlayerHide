@@ -29,10 +29,9 @@ public final class PlayerHide extends SpigotPlugin {
         registerListener(new PlayerListener());
 
         PacketEventsAPI<?> packetEvents = PacketEvents.getAPI();
-        EntityLib.init(
-            new SpigotEntityLibPlatform(PlayerHide.getInstance()),
-            new APIConfig(packetEvents)
-                .usePlatformLogger()
+        EntityLib.init(new APIConfig(
+            packetEvents,
+            new SpigotEntityLibPlatform(PlayerHide.getInstance()))
         );
 
         packetEvents.getEventManager().registerListener(new PacketListener());
