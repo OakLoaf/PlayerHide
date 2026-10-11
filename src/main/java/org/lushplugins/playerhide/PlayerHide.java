@@ -6,7 +6,7 @@ import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
 import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
 import org.bukkit.Bukkit;
-import org.lushplugins.lushlib.plugin.SpigotPlugin;
+import org.lushplugins.lushlib.utils.plugin.SpigotPlugin;
 import org.lushplugins.playerhide.listeners.PacketListener;
 import org.lushplugins.playerhide.util.WorldGuardHelper;
 import org.lushplugins.playerhide.listeners.PlayerListener;
