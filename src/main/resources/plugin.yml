@@ -1,5 +1,5 @@
 name: PlayerHide
-version: ${project.version}
+version: ${version}+${commit}
 main: org.lushplugins.playerhide.PlayerHide
 api-version: '1.21'
 github-repo: OakLoaf/PlayerHide

@@ -1,7 +1,10 @@
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 plugins {
     `java-library`
     id("com.gradleup.shadow") version("9.3.1")
-    id("xyz.jpenilla.run-paper") version("3.0.2")
+    id("xyz.jpenilla.run-paper") version("3.1.0")
 }
 
 group = "org.lushplugins"
@@ -48,31 +51,48 @@ tasks {
     }
 
     shadowJar {
+        enableAutoRelocation = true
+        relocationPrefix = "org.lushplugins.playerhide.libraries"
+
         minimize()
 
         archiveFileName.set("${project.name}-${project.version}.jar")
     }
 
     processResources{
-        filesMatching("plugin.yml") {
-            expand(project.properties)
-        }
-
         inputs.property("version", rootProject.version)
+        inputs.property("commit", getCurrentCommitHash())
+
         filesMatching("plugin.yml") {
-            expand("version" to rootProject.version)
+            expand(
+                "version" to rootProject.version,
+                "commit" to getCurrentCommitHash()
+            )
         }
     }
 
     runServer {
-        minecraftVersion("1.21.11")
+        minecraftVersion("26.2")
 
         downloadPlugins {
-            modrinth("packetevents", "2.11.2+spigot")
+            modrinth("packetevents", "2.14.0+spigot")
             modrinth("worldedit", "CkT32vix")
             modrinth("worldguard", "7.0.15")
-            modrinth("viaversion", "5.7.1")
-            modrinth("viabackwards", "5.7.1")
+            modrinth("viaversion", "5.12.1")
+            modrinth("viabackwards", "5.12.1")
         }
+    }
+}
+
+fun getCurrentCommitHash(): String {
+    val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD").start()
+    val reader = BufferedReader(InputStreamReader(process.inputStream))
+    val commitHash = reader.readLine()
+    reader.close()
+    process.waitFor()
+    if (process.exitValue() == 0) {
+        return commitHash ?: ""
+    } else {
+        throw IllegalStateException("Failed to retrieve the commit hash.")
     }
 }
