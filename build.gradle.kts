@@ -29,8 +29,8 @@ dependencies {
 
     // Libraries
     implementation("org.lushplugins.lushlib:utils:1.0.2")
-    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.19")
-    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.19")
+    implementation("io.github.revxrsal:lamp.common:4.0.0")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0")
     implementation("io.github.tofaa2:spigot:4.0.0-alpha.2")
 }
 
